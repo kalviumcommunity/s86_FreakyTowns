@@ -1,0 +1,20 @@
+{
+  "name": "asap",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "**FreakyTowns** is a fun and interactive website that showcases quirky, funny, and unusual town and village names from around the world. The platform provides a lighthearted yet informative experience where users can explore strange place names, along with images of the locations. The goal is to create an entertaining experience where people can learn about the world's most bizarre town names.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kalviumcommunity/s86_FreakyTowns.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kalviumcommunity/s86_FreakyTowns/issues"
+  },
+  "homepage": "https://github.com/kalviumcommunity/s86_FreakyTowns#readme"
+}
