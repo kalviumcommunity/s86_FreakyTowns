@@ -24,3 +24,21 @@
 - Strengthen skills in front-end web development.
 - Learn how to implement interactive features using JavaScript.
 - Develop a responsive, mobile-friendly design.
+
+
+# Branch Setup and NPM Initialization
+
+- Initialize npm project using npm init .
+- Add a .gitignore  file to exclude node_modules/ and package-lock.json/ and then added the  .gitignore file  and pushed the branch
+
+# creating new branch and adding server.js file 
+- created a new branch locally(endpoint)
+- added a server.js file which contains :
+   1. express: This is the Express module we import to set up the web server.
+   2. app.get('/ping', ...): This creates a route at /ping that responds with "Pong" when accessed.
+   3. app.listen(port, ...): This starts the server on port 3000 and prints a message to the console to confirm it's running.
+   
+# Deployment
+- I have deployed our ASAP using render
+
+  This is the link - https://s86-freakytowns.onrender.com/ping
