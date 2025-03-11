@@ -42,3 +42,9 @@
 - I have deployed our ASAP using render
 
   This is the link - https://s86-freakytowns.onrender.com/ping
+
+
+# MongoDB client 
+- installed needed dependencies like mongoose , dotenv 
+- added mongo connection link 
+-in server.js file written code for mongodb connection
