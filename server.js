@@ -1,32 +1,33 @@
-// Import the Express module
+// Import required modules
 const express = require('express');
-const app = express();
 const mongoose = require('mongoose');
-app.use(express.json())
-require('dotenv').config()
-const PORT = 3000;
+const dotenv = require('dotenv');
+const routes = require('./routes'); // Import the routes.js file
 
+// Configure environment variables
+dotenv.config();
+const app = express();
+app.use(express.json());
+const PORT = process.env.PORT || 3000;
 
+// MongoDB connection
 mongoose.connect(process.env.DB_URL)
-.then(()=>{
-    console.log("mongodb is connected");
-})
-.catch((error)=>{
-    console.log("Failed to load",error);
-})
+    .then(() => {
+        console.log("MongoDB is connected");
+    })
+    .catch((error) => {
+        console.error("Failed to connect to MongoDB", error);
+    });
 
-// Root route
+// Use the routes
+app.use('/', routes);
+
+// Default route
 app.get('/', (req, res) => {
-    res.send('Welcome to the Express server!');
-});
-                                          
-// /ping route
-app.get('/ping', (req, res) => {
-    res.send('pong');
+    res.send('Welcome to the FreakyTowns API!');
 });
 
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
-
