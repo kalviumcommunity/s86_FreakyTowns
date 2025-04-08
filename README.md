@@ -41,7 +41,7 @@
 # Deployment
 - I have deployed our ASAP using render
 
-  This is the link - https://s86-freakytowns.onrender.com/ping
+  
 
 
 # MongoDB client 

@@ -1,7 +1,7 @@
 // Import required modules
 const express = require('express');
 const router = express.Router();
-const Town = require('./models/Town'); // Import the Town model
+const Town = require('./models/TownSchema'); // Import the Town model
 
 // Create a new town (POST /towns)
 router.post('/towns', async (req, res) => {
