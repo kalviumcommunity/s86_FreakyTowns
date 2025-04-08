@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const cors = require('cors'); // Import CORS middleware
 const routes = require('./routes'); // Import the routes.js file
 
 // Configure environment variables
@@ -9,6 +10,9 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
+
+// Enable CORS
+app.use(cors()); // Allow all origins by default
 
 // MongoDB connection
 mongoose.connect(process.env.DB_URL)
@@ -20,7 +24,7 @@ mongoose.connect(process.env.DB_URL)
     });
 
 // Use the routes
-app.use('/', routes);
+app.use('/api', routes);
 
 // Default route
 app.get('/', (req, res) => {

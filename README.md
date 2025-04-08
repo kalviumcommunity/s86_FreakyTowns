@@ -38,9 +38,9 @@
    2. app.get('/ping', ...): This creates a route at /ping that responds with "Pong" when accessed.
    3. app.listen(port, ...): This starts the server on port 3000 and prints a message to the console to confirm it's running.
    
-# Deployment
+#  backend - Deployment
 - I have deployed our ASAP using render
-
+  This is the link - https://s86-freakytowns.onrender.com/ping
   
 
 
@@ -48,3 +48,9 @@
 - installed needed dependencies like mongoose , dotenv 
 - added mongo connection link 
 -in server.js file written code for mongodb connection
+
+
+
+# frontend deployment 
+- I have deployed our ASAP fontend work using CloudFare
+https://s86-freakytowns.pages.dev/
