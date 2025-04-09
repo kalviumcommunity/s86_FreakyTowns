@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import TownCard from "../components/TownCard";
 
 export default function Dashboard() {
   const [towns, setTowns] = useState([]);
-  const [newTown, setNewTown] = useState({ name: "", description: "", country: "" });
-  const [editTown, setEditTown] = useState(null); // Holds the town being edited
-  const [updatedTown, setUpdatedTown] = useState({ name: "", description: "", country: "" });
+  const [editingTown, setEditingTown] = useState(null); // State to track the town being edited
+  const navigate = useNavigate();
 
-  const API_URL = "http://localhost:3000/api/towns"; // Replace with your backend URL if different
+  const API_URL = "http://localhost:3000/api/towns";
 
-  // Fetch towns on component mount
+  // Fetch towns from the server
   useEffect(() => {
     const fetchTowns = async () => {
       try {
@@ -20,157 +19,60 @@ export default function Dashboard() {
         console.error("Error fetching towns:", error);
       }
     };
-
     fetchTowns();
   }, []);
 
-  // Add a new town
-  const handleAddTown = async () => {
-    try {
-      const response = await axios.post(API_URL, newTown);
-      setTowns([...towns, response.data]);
-      setNewTown({ name: "", description: "", country: "" }); // Reset form
-    } catch (error) {
-      console.error("Error adding town:", error);
-    }
-  };
-
   // Delete a town
-  const handleDeleteTown = async (id) => {
+  const handleDelete = async (id) => {
     try {
       await axios.delete(`${API_URL}/${id}`);
-      setTowns(towns.filter((town) => town._id !== id));
+      setTowns(towns.filter((town) => town._id !== id)); // Update state
     } catch (error) {
       console.error("Error deleting town:", error);
     }
   };
 
-  // Start editing a town
-  const handleEditTown = (town) => {
-    setEditTown(town._id);
-    setUpdatedTown({ name: town.name, description: town.description, country: town.country });
-  };
-
-  // Update a town
-  const handleUpdateTown = async (id) => {
-    try {
-      const response = await axios.put(`${API_URL}/${id}`, updatedTown);
-      setTowns(
-        towns.map((town) => (town._id === id ? response.data : town))
-      );
-      setEditTown(null); // Exit edit mode
-    } catch (error) {
-      console.error("Error updating town:", error);
-    }
+  // Edit a town
+  const handleEdit = (town) => {
+    setEditingTown(town);
+    navigate("/form", { state: { town } }); // Redirect to the form page with town data
   };
 
   return (
     <div className="min-h-screen bg-gray-100">
       <nav className="w-full bg-purple-800 py-4 text-white flex justify-between items-center px-8">
-        <span className="text-xl font-bold">FreakyTowns Dashboard</span>
-        <div className="space-x-4">
-          <button className="bg-pink-800 text-white font-semibold py-1 px-3 rounded-lg">
-            Sign Up
-          </button>
-          <button className="bg-pink-800 text-white font-semibold py-1 px-3 rounded-lg">
-            Login
-          </button>
-        </div>
+        <span className="text-xl font-bold">Towns Dashboard</span>
+        <button
+          onClick={() => navigate("/form")}
+          className="bg-green-600 text-white py-2 px-4 rounded"
+        >
+          Add New Town
+        </button>
       </nav>
       <div className="p-8">
-        <h4 className="text-2xl font-bold text-center mb-6">
-          "Where in the world? Discover places that are as unique as their names!"
-        </h4>
-        {/* Form to Add a New Town */}
-        <div className="mb-6">
-          <input
-            type="text"
-            placeholder="Name"
-            value={newTown.name}
-            onChange={(e) => setNewTown({ ...newTown, name: e.target.value })}
-            className="border p-2 mr-2"
-          />
-          <input
-            type="text"
-            placeholder="Description"
-            value={newTown.description}
-            onChange={(e) => setNewTown({ ...newTown, description: e.target.value })}
-            className="border p-2 mr-2"
-          />
-          <input
-            type="text"
-            placeholder="Country"
-            value={newTown.country}
-            onChange={(e) => setNewTown({ ...newTown, country: e.target.value })}
-            className="border p-2 mr-2"
-          />
-          <button onClick={handleAddTown} className="bg-green-600 text-white p-2 rounded">
-            Add Town
-          </button>
-        </div>
-        {/* Display Town Cards */}
+        <h4 className="text-2xl font-bold text-center mb-6">Towns List</h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {towns.map((town) => (
-            <div key={town._id} className="relative">
-              {editTown === town._id ? (
-                // Edit Mode
-                <div className="border p-4 bg-white shadow rounded">
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    value={updatedTown.name}
-                    onChange={(e) => setUpdatedTown({ ...updatedTown, name: e.target.value })}
-                    className="border p-2 mb-2 block w-full"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Description"
-                    value={updatedTown.description}
-                    onChange={(e) => setUpdatedTown({ ...updatedTown, description: e.target.value })}
-                    className="border p-2 mb-2 block w-full"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Country"
-                    value={updatedTown.country}
-                    onChange={(e) => setUpdatedTown({ ...updatedTown, country: e.target.value })}
-                    className="border p-2 mb-2 block w-full"
-                  />
+            <div key={town._id} className="bg-blue-300 p-4 rounded shadow-lg">
+              <div className="flex justify-between items-center">
+                <h3 className="text-xl font-bold">{town.name}</h3>
+                <div>
                   <button
-                    onClick={() => handleUpdateTown(town._id)}
-                    className="bg-blue-600 text-white p-2 rounded mr-2"
-                  >
-                    Update
-                  </button>
-                  <button
-                    onClick={() => setEditTown(null)}
-                    className="bg-gray-400 text-white p-2 rounded"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              ) : (
-                // Display Mode
-                <>
-                  <TownCard
-                    name={town.name}
-                    description={town.description}
-                    location={town.country}
-                  />
-                  <button
-                    onClick={() => handleEditTown(town)}
-                    className="absolute top-2 right-2 bg-yellow-500 text-white p-2 rounded"
+                    onClick={() => handleEdit(town)}
+                    className="bg-yellow-500 text-white py-1 px-3 rounded mr-2"
                   >
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDeleteTown(town._id)}
-                    className="absolute top-2 right-14 bg-red-600 text-white p-2 rounded"
+                    onClick={() => handleDelete(town._id)}
+                    className="bg-red-500 text-white py-1 px-3 rounded"
                   >
                     Delete
                   </button>
-                </>
-              )}
+                </div>
+              </div>
+              <p className="text-gray-700">{town.description}</p>
+              <p className="text-gray-500 mt-2">📍 {town.country}</p>
             </div>
           ))}
         </div>
