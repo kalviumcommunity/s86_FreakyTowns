@@ -50,6 +50,11 @@
 -in server.js file written code for mongodb connection
 
 
+# Modifying data 
+ implemnted crud operations 
+
+# setting up react 
+- installed react and created a home page 
 
 # frontend deployment 
 - I have deployed our ASAP fontend work using CloudFare
