@@ -21,19 +21,19 @@ export default function Dashboard() {
     fetchTowns();
   }, []);
 
-  // Delete a town
+  // Delete a town 
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${API_URL}/${id}`);
-      setTowns(towns.filter((town) => town._id !== id)); // Update state
+      setTowns(towns.filter((town) => town._id !== id)); 
     } catch (error) {
       console.error("Error deleting town:", error);
     }
   };
 
-  // Edit a town
+  // Editing  a town
   const handleEdit = (town) => {
-    navigate("/form", { state: { town } }); // Redirect to the form page with town data
+    navigate("/form", { state: { town } }); 
   };
 
   // Navigate to review page
