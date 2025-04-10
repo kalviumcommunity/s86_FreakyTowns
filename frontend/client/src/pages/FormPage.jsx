@@ -10,6 +10,7 @@ export default function FormPage() {
     description: "",
     country: "",
   });
+  const [errors, setErrors] = useState({}); // Track validation errors
 
   const townToEdit = location.state?.town; // Get town data from navigation state
   const API_URL = "http://localhost:3000/api/towns";
@@ -24,8 +25,37 @@ export default function FormPage() {
     }
   }, [townToEdit]);
 
+  // Validation logic
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required.";
+    } else if (formData.name.length < 3) {
+      newErrors.name = "Name must be at least 3 characters.";
+    }
+
+    if (!formData.description.trim()) {
+      newErrors.description = "Description is required.";
+    } else if (formData.description.length < 10) {
+      newErrors.description = "Description must be at least 10 characters.";
+    }
+
+    if (!formData.country.trim()) {
+      newErrors.country = "Country is required.";
+    } else if (formData.country.length < 2) {
+      newErrors.country = "Country must be at least 2 characters.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // Return true if no errors
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validate()) {
+      return; // Stop submission if validation fails
+    }
+
     try {
       if (townToEdit) {
         // Update existing town
@@ -54,8 +84,13 @@ export default function FormPage() {
           placeholder="Name"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="border p-2 mb-4 block w-full"
+          className={`border p-2 mb-1 block w-full ${
+            errors.name ? "border-red-500" : ""
+          }`}
         />
+        {errors.name && (
+          <p className="text-red-500 text-sm mb-4">{errors.name}</p>
+        )}
         <input
           type="text"
           placeholder="Description"
@@ -63,8 +98,13 @@ export default function FormPage() {
           onChange={(e) =>
             setFormData({ ...formData, description: e.target.value })
           }
-          className="border p-2 mb-4 block w-full"
+          className={`border p-2 mb-1 block w-full ${
+            errors.description ? "border-red-500" : ""
+          }`}
         />
+        {errors.description && (
+          <p className="text-red-500 text-sm mb-4">{errors.description}</p>
+        )}
         <input
           type="text"
           placeholder="Country"
@@ -72,8 +112,13 @@ export default function FormPage() {
           onChange={(e) =>
             setFormData({ ...formData, country: e.target.value })
           }
-          className="border p-2 mb-4 block w-full"
+          className={`border p-2 mb-1 block w-full ${
+            errors.country ? "border-red-500" : ""
+          }`}
         />
+        {errors.country && (
+          <p className="text-red-500 text-sm mb-4">{errors.country}</p>
+        )}
         <button
           type="submit"
           className="bg-green-600 text-white py-2 px-4 rounded w-full"
