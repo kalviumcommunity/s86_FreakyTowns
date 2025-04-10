@@ -4,7 +4,6 @@ import axios from "axios";
 
 export default function Dashboard() {
   const [towns, setTowns] = useState([]);
-  const [editingTown, setEditingTown] = useState(null); // State to track the town being edited
   const navigate = useNavigate();
 
   const API_URL = "http://localhost:3000/api/towns";
@@ -34,8 +33,12 @@ export default function Dashboard() {
 
   // Edit a town
   const handleEdit = (town) => {
-    setEditingTown(town);
     navigate("/form", { state: { town } }); // Redirect to the form page with town data
+  };
+
+  // Navigate to review page
+  const handleReview = (town) => {
+    navigate("/review", { state: { town } }); // Redirect to the review page with town data
   };
 
   return (
@@ -58,6 +61,12 @@ export default function Dashboard() {
                 <h3 className="text-xl font-bold">{town.name}</h3>
                 <div>
                   <button
+                    onClick={() => handleReview(town)}
+                    className="bg-purple-500 text-white py-1 px-3 rounded mr-2"
+                  >
+                    Review
+                  </button>
+                  <button
                     onClick={() => handleEdit(town)}
                     className="bg-yellow-500 text-white py-1 px-3 rounded mr-2"
                   >
@@ -73,6 +82,18 @@ export default function Dashboard() {
               </div>
               <p className="text-gray-700">{town.description}</p>
               <p className="text-gray-500 mt-2">📍 {town.country}</p>
+              {town.reviews && town.reviews.length > 0 && (
+                <div className="mt-4">
+                  <h4 className="font-bold">Reviews:</h4>
+                  <ul className="list-disc pl-4">
+                    {town.reviews.map((review, index) => (
+                      <li key={index} className="text-gray-700">
+                        {review}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           ))}
         </div>
