@@ -49,6 +49,28 @@ router.delete('/towns/:id', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+//adding a review 
+
+router.post("/towns/:id/reviews", async (req, res) => {
+    const { id } = req.params;
+    const { review } = req.body;
+  
+    try {
+      const town = await Town.findById(id);
+      if (!town) return res.status(404).send("Town not found");
+  
+      town.reviews = town.reviews || [];
+      town.reviews.push(review);
+      await town.save();
+  
+      res.status(200).send(town);
+    } catch (error) {
+      console.error("Error adding review:", error);
+      res.status(500).send("Server error");
+    }
+  });
+  
+  
 
 // Export the router
 module.exports = router;
