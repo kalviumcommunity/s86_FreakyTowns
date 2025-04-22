@@ -1,29 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function HomePage() {
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/auth/me", { withCredentials: true })
+      .then((res) => setCurrentUser(res.data))
+      .catch(() => setCurrentUser(null));
+  }, []);
+
   return (
-    <div className="min-h-screen bg-blue-400 text-white flex flex-col items-center justify-center">
-      {/* Website Name and Navigation */}
-      <nav className="w-full bg-purple-800 py-4 text-center text-white font-bold text-xl fixed top-0 flex justify-between items-center px-8">
-        <span>FreakyTowns</span>
-        <div className="space-x-4">
-          <button className="bg-pink-800 text-white font-semibold py-1 px-3 text-base rounded-lg">
-            Sign Up
-          </button>
-          <button className="bg-pink-800 text-white font-semibold py-1 px-3 text-base rounded-md">
-            Login
-          </button>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-blue-400 text-white flex flex-col items-center">
 
       {/* Hero Section */}
-      <header className="text-center p-8 mt-16">
+      <header className="text-center p-8 mt-20">
         <h1 className="text-4xl md:text-6xl font-bold mb-4">Explore Towns</h1>
         <p className="text-lg md:text-2xl mb-6">
           Discover unique places worldwide with FreakyTowns.
         </p>
-        {/* Link to Dashboard */}
         <Link to="/dashboard">
           <button className="bg-pink-800 text-white font-semibold py-3 px-6 rounded-3xl">
             Explore Towns

@@ -20,27 +20,44 @@ export default function ReviewPage() {
     }
   };
 
+  // Go back functionality
+  const handleGoBack = () => {
+    navigate(-1); // Go back to the previous page
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded shadow-lg w-full max-w-md"
-      >
-        <h2 className="text-2xl font-bold mb-4">Review for {town.name}</h2>
-        <textarea
-          placeholder="Write your review here..."
-          value={review}
-          onChange={(e) => setReview(e.target.value)}
-          className="border p-2 mb-4 block w-full"
-          rows="4"
-        ></textarea>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded w-full"
+    <div className="min-h-screen bg-gray-100">
+      <div className="flex items-center justify-center pt-20">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-6 rounded shadow-lg w-full max-w-md"
         >
-          Submit Review
-        </button>
-      </form>
+          {/* Go Back Button */}
+          <button
+            onClick={handleGoBack}
+            className="bg-gray-500 text-white py-2 px-4 rounded mb-6"
+          >
+            🔙 Go Back
+          </button>
+
+          <h2 className="text-2xl font-bold mb-4">Review for {town?.name}</h2>
+
+          <textarea
+            placeholder="Write your review here..."
+            value={review}
+            onChange={(e) => setReview(e.target.value)}
+            className="border p-2 mb-4 block w-full"
+            rows="4"
+          ></textarea>
+
+          <button
+            type="submit"
+            className="bg-blue-500 text-white py-2 px-4 rounded w-full"
+          >
+            Submit Review
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

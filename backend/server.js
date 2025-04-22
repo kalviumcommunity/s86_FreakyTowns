@@ -2,19 +2,27 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const cors = require('cors'); // Import CORS middleware
-const routes = require('./routes'); // Import the routes.js file
+const cors = require('cors');
+const routes = require('./routes/towns');
+const userRoutes = require('./routes/users');
 
-// Configure environment variables
 dotenv.config();
 const app = express();
 app.use(express.json());
+app.use(cors());
+app.use('/api', userRoutes);
+
 const PORT = process.env.PORT || 3000;
 
-// Enable CORS
-app.use(cors()); // Allow all origins by default
 
-// MongoDB connection
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
+
+
+
+
+
+
 mongoose.connect(process.env.DB_URL)
     .then(() => {
         console.log("MongoDB is connected");
@@ -23,10 +31,9 @@ mongoose.connect(process.env.DB_URL)
         console.error("Failed to connect to MongoDB", error);
     });
 
-// Use the routes
+
 app.use('/api', routes);
 
-// Default route
 app.get('/', (req, res) => {
     res.send('Welcome to the FreakyTowns API!');
 });
