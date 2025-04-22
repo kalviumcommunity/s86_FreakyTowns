@@ -5,8 +5,9 @@ import Dashboard from "./pages/Dashboard";
 import FormPage from "./pages/FormPage";
 import ReviewPage from "./pages/ReviewPage";
 import HomePage from "./pages/HomePage";
-import SignupPage from "./pages/SignupPage";
-import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import UserEntityFilter from './components/UserEntityFilter.jsx';
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/review" element={<ReviewPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/sqltest" element={<UserEntityFilter/>} />
       </Routes>
     </Router>
   );
