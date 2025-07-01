@@ -4,26 +4,22 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/UserSchema');
 
-// Secret key for JWT
-const JWT_SECRET = "your_secret_key_here";  // Replace with a more secure, environment variable in production
+const JWT_SECRET = "yourSecretKey";
 
-// Signup route
+// ✅ Signup route
 router.post('/signup', async (req, res) => {
   const { username, email, password } = req.body;
 
-  // Basic validation
   if (!username || !email || !password || password.length < 6) {
     return res.status(400).json({ error: "All fields are required. Password must be at least 6 characters." });
   }
 
   try {
-    // Check if username or email already exists
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
       return res.status(409).json({ error: "Username or email already in use" });
     }
 
-    // Hash password and create user
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       username,
@@ -39,7 +35,7 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// Login route
+// ✅ Login route 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -54,38 +50,42 @@ router.post('/login', async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ error: "Invalid credentials" });
 
-    // Create JWT token
-    const token = jwt.sign({ userId: user._id, username: user.username }, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id, username: user.username }, JWT_SECRET, { expiresIn: '7d' }); 
 
-    // Send the token to the client
-    res.status(200).json({ message: "Logged in successfully", token });
+    res.cookie("token", token, {
+      httpOnly: true, 
+      secure: false,  
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.status(200).json({ message: "Logged in successfully", username: user.username });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Get the currently logged-in user's info (Protected route)
+// ✅ Protected route using cookie instead of headers
 router.get('/me', async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1]; // Bearer token
+  const token = req.cookies.token; 
 
   if (!token) return res.status(401).json({ error: "No token provided" });
 
   try {
-    // Verify the token
     const decoded = jwt.verify(token, JWT_SECRET);
     const user = await User.findById(decoded.userId);
 
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    // Send the user's details
     res.json({ username: user.username, email: user.email });
   } catch (err) {
-    res.status(500).json({ error: "Failed to authenticate token" });
+    res.status(401).json({ error: "Invalid or expired token" });
   }
 });
 
-// Logout route (optional for JWT, you can remove it for stateless authentication)
+// ✅ Logout route clears the token cookie
 router.post('/logout', (req, res) => {
+  res.clearCookie("token"); 
   res.status(200).json({ message: "Logged out successfully" });
 });
 
