@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const cookieParser = require("cookie-parser");
 const routes = require('./routes/towns');
 const userRoutes = require('./routes/users');
 const entityRoutes = require('./routes/sqlEntities');
@@ -12,20 +13,20 @@ require('./models/sqlAssociations');
 
 dotenv.config();
 const app = express();
+app.use(cookieParser());
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', 
+  credentials: true
+}));
 app.use('/api', userRoutes);
 app.use("/api", entityRoutes);
 
 const PORT = process.env.PORT || 3000;
 
-
+//auth routes
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
-
-
-
-
 
 
 mongoose.connect(process.env.DB_URL)

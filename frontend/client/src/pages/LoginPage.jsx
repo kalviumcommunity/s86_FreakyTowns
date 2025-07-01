@@ -10,7 +10,7 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/api/auth/login", formData);
+      await axios.post("http://localhost:3000/api/auth/login", formData , { withCredentials: true });
       alert("Logged in successfully!");
       navigate("/dashboard");
     } catch (err) {
