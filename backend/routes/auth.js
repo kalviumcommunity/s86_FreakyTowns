@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/UserSchema');
 
-const JWT_SECRET = "yourSecretKey";
+
 
 // ✅ Signup route
 router.post('/signup', async (req, res) => {
@@ -50,7 +50,7 @@ router.post('/login', async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ error: "Invalid credentials" });
 
-    const token = jwt.sign({ userId: user._id, username: user.username }, JWT_SECRET, { expiresIn: '7d' }); 
+    const token = jwt.sign({ userId: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '7d' }); 
 
     res.cookie("token", token, {
       httpOnly: true, 
